@@ -1,0 +1,56 @@
+﻿@using Users.Models
+@model RoleEditModel
+@{
+    ViewBag.Title = "编辑角色";
+}
+@Html.ValidationSummary()
+@using (Html.BeginForm())
+{
+    <input type="hidden" name="roleName" value="@Model.Role.Name" />
+    <div class="panel panel-primary">
+        <div class="panel-heading">添加到 @Model.Role.Name</div>
+        <table class="table table-striped">
+            @if (Model.NonMembers.Count() == 0)
+            {
+                <tr><td colspan="2">所有用户都是成员</td></tr>
+            }
+            else
+            {
+                <tr><td>用户标识</td><td>添加到角色</td></tr>
+                foreach (AppUser user in Model.NonMembers)
+                {
+                    <tr>
+                        <td>@user.UserName</td>
+                        <td><input type="checkbox" name="IdsToAdd" value="@user.Id" /></td>
+                    </tr>
+                }
+            }
+
+        </table>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">从 @Model.Role.Name 中删除</div>
+        <table class="table table-striped">
+            @if (Model.Members.Count()==0)
+            {
+                <tr><td colspan="2">没有成员用户</td></tr>
+                
+            }
+            else
+            {
+                <tr><td>用户标识</td><td>从角色中删除</td></tr>
+                foreach (AppUser user in Model.Members)
+                {
+                    <tr>
+                        <td>@user.UserName</td>
+                        <td><input type="checkbox" name="IdsToDelete" value="@user.Id" /></td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+    <button type="submit" class="btn btn-primary">保存</button>
+    @Html.ActionLink("取消", "Index", null, new { @class="btn btn-default"})
+}
+
+
